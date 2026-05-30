@@ -11,7 +11,7 @@ import './HomePage.css'
 export default function HomePage() {
   return (
     <div className="home-page">
-      <Header />
+      <Header activePage="home" />
       <main className="home-main">
         <HeroBanner />
         <CategorySection />

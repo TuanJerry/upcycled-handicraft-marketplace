@@ -1,6 +1,11 @@
+import { Link } from 'react-router-dom'
 import './Header.css'
 
-export default function Header() {
+interface HeaderProps {
+  activePage?: 'home' | 'products' | 'workshop' | 'about'
+}
+
+export default function Header({ activePage = 'home' }: HeaderProps) {
   return (
     <header className="site-header">
       <div className="announcement-bar">
@@ -49,18 +54,18 @@ export default function Header() {
 
       <nav className="main-nav">
         <div className="nav-inner">
-          <a href="/" className="nav-logo-link">
+          <Link to="/" className="nav-logo-link">
             <img
               src="https://api.builder.io/api/v1/image/assets/TEMP/a30a10014afb77aa24e8b2f705174e5c2890c4f1?width=102"
               alt="Upcycled Marketplace Logo"
               className="nav-logo"
             />
-          </a>
+          </Link>
           <ul className="nav-menu">
-            <li><a href="/" className="nav-link nav-link--active">Trang chủ</a></li>
-            <li><a href="#products" className="nav-link">Sản phẩm</a></li>
-            <li><a href="#workshop" className="nav-link">Workshop</a></li>
-            <li><a href="#about" className="nav-link">Về chúng tôi</a></li>
+            <li><Link to="/" className={`nav-link${activePage === 'home' ? ' nav-link--active' : ''}`}>Trang chủ</Link></li>
+            <li><Link to="/san-pham" className={`nav-link${activePage === 'products' ? ' nav-link--active' : ''}`}>Sản phẩm</Link></li>
+            <li><a href="#workshop" className={`nav-link${activePage === 'workshop' ? ' nav-link--active' : ''}`}>Workshop</a></li>
+            <li><a href="#about" className={`nav-link${activePage === 'about' ? ' nav-link--active' : ''}`}>Về chúng tôi</a></li>
           </ul>
           <div className="search-bar">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
