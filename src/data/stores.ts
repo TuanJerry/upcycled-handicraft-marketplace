@@ -8,13 +8,25 @@ export interface FeaturedProduct {
   price: string
 }
 
+export interface ProductMaterial {
+  name: string
+  percentage: number
+  icon?: string
+}
+
 export interface StoreProduct {
   id: string
   image: string
+  thumbnails?: string[]
   name: string
   category: string
   price: string
   rating: number
+  description?: string
+  ecoScore?: number
+  materials?: ProductMaterial[]
+  details?: string[]
+  craftNote?: string
 }
 
 export interface StoreWorkshop {
@@ -64,12 +76,28 @@ export const STORES: StoreData[] = [
       { image: PRODUCT_IMG, name: 'Kệ gỗ pallet', price: '550.000đ' },
     ],
     products: [
-      { id: '1', image: PRODUCT_IMG, name: 'Đồng hồ gỗ Pallet', category: 'Nội thất tái chế', price: '450.000đ', rating: 9.5 },
-      { id: '2', image: PRODUCT_IMG, name: 'Túi Canvas "Mâm Xanh"', category: 'Phụ kiện organic', price: '320.000đ', rating: 9.5 },
-      { id: '3', image: PRODUCT_IMG, name: 'Bộ nến đậu nành Organic', category: 'Decor & Quà tặng', price: '195.000đ', rating: 9.2 },
-      { id: '4', image: PRODUCT_IMG, name: 'Kệ bút "Đại Dương"', category: 'Văn phòng xanh', price: '180.000đ', rating: 9.0 },
-      { id: '5', image: PRODUCT_IMG, name: 'Bộ dụng cụ Tre tự nhiên', category: 'Gia dụng bền vững', price: '125.000đ', rating: 10 },
-      { id: '6', image: PRODUCT_IMG, name: 'Macrame "Sương Mai"', category: 'Trang trí nội thất', price: '680.000đ', rating: 9.4 },
+      {
+        id: '1',
+        image: PRODUCT_IMG,
+        thumbnails: [PRODUCT_IMG, PRODUCT_IMG, PRODUCT_IMG, PRODUCT_IMG],
+        name: 'Đồng hồ gỗ Pallet',
+        category: 'Nội thất tái chế',
+        price: '450.000đ',
+        rating: 9.5,
+        ecoScore: 95,
+        description: 'Được chế tác thủ công từ gỗ pallet tái chế, mỗi chiếc đồng hồ mang một vân gỗ độc đáo không lặp lại. Bộ máy Nhật Bản bền bỉ, thiết kế tối giản tôn vinh vẻ đẹp tự nhiên của gỗ.',
+        materials: [
+          { name: 'Gỗ pallet tái chế', percentage: 85 },
+          { name: 'Kim loại không gỉ', percentage: 15 },
+        ],
+        details: ['Kích thước: 30cm × 30cm | Dày: 4cm', 'Máy Nhật Bản chính xác cao', 'Hoàn thiện bằng dầu tự nhiên không độc hại'],
+        craftNote: 'Mỗi sản phẩm được chà nhám và đánh bóng thủ công qua 5 bước, đảm bảo bề mặt mịn màng và bền đẹp theo thời gian.',
+      },
+      { id: '2', image: PRODUCT_IMG, name: 'Túi Canvas "Mâm Xanh"', category: 'Phụ kiện organic', price: '320.000đ', rating: 9.5, ecoScore: 92 },
+      { id: '3', image: PRODUCT_IMG, name: 'Bộ nến đậu nành Organic', category: 'Decor & Quà tặng', price: '195.000đ', rating: 9.2, ecoScore: 97 },
+      { id: '4', image: PRODUCT_IMG, name: 'Kệ bút "Đại Dương"', category: 'Văn phòng xanh', price: '180.000đ', rating: 9.0, ecoScore: 90 },
+      { id: '5', image: PRODUCT_IMG, name: 'Bộ dụng cụ Tre tự nhiên', category: 'Gia dụng bền vững', price: '125.000đ', rating: 10, ecoScore: 99 },
+      { id: '6', image: PRODUCT_IMG, name: 'Macrame "Sương Mai"', category: 'Trang trí nội thất', price: '680.000đ', rating: 9.4, ecoScore: 94 },
     ],
     workshops: [
       {

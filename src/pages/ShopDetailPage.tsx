@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { STORES } from '../data/stores'
@@ -155,13 +155,17 @@ export default function ShopDetailPage() {
                         <p className="product-card-category">{product.category}</p>
                         <div className="product-card-footer">
                           <span className="product-card-price">{product.price}</span>
-                          <button className="product-add-to-cart-btn" aria-label="Thêm vào giỏ hàng">
+                          <Link
+                            to={`/cua-hang/${slug}/san-pham/${product.id}`}
+                            className="product-add-to-cart-btn"
+                            aria-label="Thêm vào giỏ hàng"
+                          >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                               <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                               <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                          </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
