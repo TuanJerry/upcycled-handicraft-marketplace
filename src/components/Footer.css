@@ -1,0 +1,159 @@
+.site-footer {
+  background: #436e35;
+  width: 100%;
+}
+
+.footer-main {
+  padding: 40px 120px 24px;
+}
+
+.footer-inner {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 64px;
+}
+
+.footer-logo {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.footer-links-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.footer-links-heading {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.footer-links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.footer-copyright {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  text-align: right;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.social-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon-link:hover {
+  opacity: 0.8;
+}
+
+.footer-bottom {
+  display: flex;
+  padding: 12px 120px;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  background: #01370c;
+}
+
+.footer-payment-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  text-align: right;
+  margin: 0;
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .footer-main {
+    padding: 40px 24px 24px;
+  }
+
+  .footer-inner {
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .footer-bottom {
+    padding: 12px 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-payment-text {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .footer-brand-col {
+    align-items: flex-start;
+  }
+
+  .footer-copyright {
+    text-align: left;
+  }
+}

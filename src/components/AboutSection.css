@@ -1,0 +1,141 @@
+.about-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 120px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.about-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.about-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+}
+
+.about-heading-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  align-self: stretch;
+}
+
+.about-title {
+  font-family: Unbounded, sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: #343434;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.about-divider {
+  width: 200px;
+  height: 2px;
+  background: rgba(52, 52, 52, 0.8);
+  border-radius: 1px;
+}
+
+.about-description {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #343434;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.about-schedule {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #343434;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.about-register-btn {
+  width: 282px;
+  height: 64px;
+  border: none;
+  border-radius: 8px;
+  background: #3b823e;
+  box-shadow: 0 8px 23px 0 rgba(80, 107, 82, 0.13);
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.about-register-btn:hover {
+  background: #2f6832;
+}
+
+.about-image-wrapper {
+  flex: 1;
+  align-self: stretch;
+}
+
+.about-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid #3b823e;
+  box-shadow: 0 8px 23px 0 rgba(80, 107, 82, 0.13);
+  display: block;
+  min-height: 400px;
+}
+
+@media (max-width: 1024px) {
+  .about-section {
+    padding: 40px 24px;
+    flex-direction: column;
+  }
+
+  .about-title {
+    font-size: 36px;
+  }
+
+  .about-description {
+    font-size: 18px;
+  }
+
+  .about-image-wrapper {
+    width: 100%;
+    align-self: auto;
+  }
+
+  .about-img {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 28px;
+  }
+
+  .about-description {
+    font-size: 16px;
+  }
+
+  .about-register-btn {
+    width: 100%;
+  }
+}

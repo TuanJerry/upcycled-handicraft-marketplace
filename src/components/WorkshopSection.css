@@ -1,0 +1,120 @@
+.workshop-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 120px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.workshop-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.workshop-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #343434;
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.workshop-divider {
+  width: 200px;
+  height: 2px;
+  background: rgba(52, 52, 52, 0.8);
+  border-radius: 1px;
+}
+
+.workshop-cards {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.workshop-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding: 40px 48px;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 8px 23px 0 rgba(80, 107, 82, 0.13);
+  min-height: 280px;
+  box-sizing: border-box;
+}
+
+.workshop-card--overlay {
+  background-image: linear-gradient(0deg, rgba(80, 107, 82, 0.25) 0%, rgba(80, 107, 82, 0.25) 100%),
+    var(--bg-url);
+  background-blend-mode: overlay;
+}
+
+.workshop-card-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.workshop-register-btn {
+  width: 400px;
+  max-width: 100%;
+  height: 64px;
+  border: none;
+  border-radius: 8px;
+  background: #3b823e;
+  box-shadow: 0 8px 23px 0 rgba(80, 107, 82, 0.13);
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.workshop-register-btn:hover {
+  background: #2f6832;
+}
+
+@media (max-width: 1024px) {
+  .workshop-section {
+    padding: 24px;
+  }
+
+  .workshop-card {
+    padding: 32px 24px;
+  }
+
+  .workshop-register-btn {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .workshop-cards {
+    flex-direction: column;
+  }
+
+  .workshop-card-title {
+    font-size: 22px;
+  }
+}
