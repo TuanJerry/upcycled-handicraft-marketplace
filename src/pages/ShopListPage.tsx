@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import StoreCard from '../components/StoreCard'
+import { STORES } from '../data/stores'
 import './ShopListPage.css'
 
 const CATEGORIES = [
@@ -14,59 +15,6 @@ const CATEGORIES = [
   { label: 'Tác phẩm nghệ thuật', children: [] },
   { label: 'Nội thất bền vững', children: [] },
   { label: 'Thời trang tái chế', children: [] },
-]
-
-const STORES = [
-  {
-    bannerImage: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=800',
-    avatarImage: 'https://api.builder.io/api/v1/image/assets/TEMP/a30a10014afb77aa24e8b2f705174e5c2890c4f1?width=120',
-    name: 'Green Earth Artisan',
-    description: 'Chuyên đồ gia dụng thủ công từ vật liệu tái chế 100%.',
-    productCount: 48,
-    workshopCount: 5,
-    featuredProducts: [
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Chậu cây tái chế',
-        price: '150.000đ',
-      },
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Giỏ vải vụn',
-        price: '280.000đ',
-      },
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Kệ gỗ pallet',
-        price: '550.000đ',
-      },
-    ],
-  },
-  {
-    bannerImage: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=800',
-    avatarImage: 'https://api.builder.io/api/v1/image/assets/TEMP/a30a10014afb77aa24e8b2f705174e5c2890c4f1?width=120',
-    name: 'Eco Thread Collective',
-    description: 'Tái sinh những thước vải thừa thành phụ kiện thời trang độc bản.',
-    productCount: 32,
-    workshopCount: 2,
-    featuredProducts: [
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Túi bạt Canvas',
-        price: '320.000đ',
-      },
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Khuyên tai vải',
-        price: '120.000đ',
-      },
-      {
-        image: 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=120',
-        name: 'Nến thơm hũ thủy tinh',
-        price: '190.000đ',
-      },
-    ],
-  },
 ]
 
 export default function ShopListPage() {

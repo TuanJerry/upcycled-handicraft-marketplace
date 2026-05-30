@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './StoreCard.css'
 
 interface FeaturedProduct {
@@ -7,6 +8,7 @@ interface FeaturedProduct {
 }
 
 interface StoreCardProps {
+  slug: string
   bannerImage: string
   avatarImage: string
   name: string
@@ -17,6 +19,7 @@ interface StoreCardProps {
 }
 
 export default function StoreCard({
+  slug,
   bannerImage,
   avatarImage,
   name,
@@ -52,7 +55,7 @@ export default function StoreCard({
               </span>
             </div>
           </div>
-          <a href="#" className="store-visit-btn">Xem cửa hàng</a>
+          <Link to={`/cua-hang/${slug}`} className="store-visit-btn">Xem cửa hàng</Link>
         </div>
 
         <div className="store-featured">
