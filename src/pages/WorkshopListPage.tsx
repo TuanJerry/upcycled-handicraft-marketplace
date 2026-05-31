@@ -1,104 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { WORKSHOPS, FEATURED_WORKSHOP } from '../data/workshops'
 import './WorkshopListPage.css'
 
 const CATEGORIES = ['Tất cả', 'Tái chế nhựa/giấy', 'Handmade Decor', 'Nghệ thuật & Hội họa', 'Kỹ thuật mộc']
-
-const FEATURED_WORKSHOP = {
-  id: 'featured-1',
-  image: 'https://api.builder.io/api/v1/image/assets/TEMP/bb5babe29e02645a7fa8d381db67450a44b69410?width=1438',
-  rating: 5,
-  reviewCount: 48,
-  title: 'Chế tác bàn ghế gỗ từ pallet cũ - Creative Woodwork',
-  organizer: 'Mộc Craft Studio',
-  date: 'Thứ 7, ngày 24/08/2024',
-  location: 'Tổ chức trực tiếp tại Quận 3, TP.HCM',
-  spots: '03 / 10 chỗ',
-  price: '450.000đ',
-}
-
-const WORKSHOPS = [
-  {
-    id: 'ws-1',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/7042a5ff74d21af8b611808ea62735ef41c7777a?width=757',
-    mode: 'Offline',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/9b947f5d25ae523f5a7d94a2d9c89fac3eef6992?width=48',
-    instructor: 'Lê Minh Tâm',
-    title: 'Biến Chai Thủy Tinh thành Đèn Trang Trí',
-    description: 'Học kỹ thuật cắt kính và trang trí đèn từ những chai rượu vang cũ đã qua sử dụng.',
-    duration: '3 giờ',
-    schedule: 'Chủ Nhật hàng tuần',
-    price: '350.000đ',
-    ecoScore: '9.8',
-  },
-  {
-    id: 'ws-2',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/3801dbb1bac848e92223b6a83e7cd09ebdd796fa?width=757',
-    mode: 'Online',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/d16e5c6a8e54594b687198756b78a606ddc53686?width=48',
-    instructor: 'Hương Thảo',
-    title: 'Nghệ thuật Macrame từ dây sợi tự nhiên',
-    description: 'Sáng tạo các món đồ decor treo tường tinh tế chỉ bằng những nút thắt sợi cotton.',
-    duration: '2 giờ',
-    schedule: 'Thứ 7 linh hoạt',
-    price: '250.000đ',
-    ecoScore: null,
-  },
-  {
-    id: 'ws-3',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/0eddb35438b9c34748f5bc0d05f2b08faca484bb?width=757',
-    mode: 'Offline',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/9b947f5d25ae523f5a7d94a2d9c89fac3eef6992?width=48',
-    instructor: 'Bùi Xuân',
-    title: 'Sản xuất gốm thô từ đất sét tái chế',
-    description: 'Trải nghiệm quy trình nhào nặn và nung gốm thủ công bằng phương pháp truyền thống.',
-    duration: '4 giờ',
-    schedule: 'Mỗi chiều Thứ 6',
-    price: '520.000đ',
-    ecoScore: null,
-  },
-  {
-    id: 'ws-4',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/8fc60acc965cb0edea18fa127860a99fb1f1d18f?width=757',
-    mode: 'Offline',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/36c1443511dcf84b0012bed1633b029039cbf3de?width=48',
-    instructor: 'Linh Lan',
-    title: 'Chế tác trang sức từ vỏ sò & hạt nhựa',
-    description: 'Tạo nên những bộ phụ kiện độc đáo từ những nguyên liệu biển cả tái sinh.',
-    duration: '2.5 giờ',
-    schedule: 'Theo yêu cầu',
-    price: '290.000đ',
-    ecoScore: null,
-  },
-  {
-    id: 'ws-5',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/537bceca6ec7674b39b04f3bd69b7c65d3175a33?width=757',
-    mode: 'Online',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/adb9b1b1df6d60bd5294c9c2357354016040f538?width=48',
-    instructor: 'Hoàng Long',
-    title: 'Tự làm giấy thủ công từ xơ thực vật',
-    description: 'Tìm hiểu nghệ thuật làm giấy truyền thống từ vỏ chuối và bã mía.',
-    duration: '3 giờ',
-    schedule: 'Tối Thứ 4 linh hoạt',
-    price: 'Miễn phí',
-    ecoScore: null,
-  },
-  {
-    id: 'ws-6',
-    image: 'https://api.builder.io/api/v1/image/assets/TEMP/b3ec7661f30758cb65a1d6536a98b9581f3dbda6?width=757',
-    mode: 'Offline',
-    avatar: 'https://api.builder.io/api/v1/image/assets/TEMP/091d9eaf762bbcbbee3c9d5fb3a6218bb5ce0d53?width=48',
-    instructor: 'Nhóm Indigo',
-    title: 'Nhuộm chàm tự nhiên trên vải Linen',
-    description: 'Học cách tạo màu từ cây chàm và thực hành kỹ thuật nhuộm Shibori Nhật Bản.',
-    duration: '5 giờ',
-    schedule: 'Cả ngày Thứ 7',
-    price: '680.000đ',
-    ecoScore: null,
-  },
-]
 
 function StarIcon() {
   return (
@@ -135,6 +42,7 @@ function ArrowIcon({ color = '#87A96B' }: { color?: string }) {
 export default function WorkshopListPage() {
   const [activeCategory, setActiveCategory] = useState('Tất cả')
   const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
 
   return (
     <div className="workshop-page">
@@ -288,7 +196,7 @@ export default function WorkshopListPage() {
                 </div>
               </div>
               <div className="workshop-featured-price">{FEATURED_WORKSHOP.price}</div>
-              <button className="workshop-featured-cta">Xem chi tiết Workshop</button>
+              <button className="workshop-featured-cta" onClick={() => navigate('/workshop/ws-1')}>Xem chi tiết Workshop</button>
             </div>
           </div>
         </div>
@@ -338,9 +246,7 @@ export default function WorkshopListPage() {
                   </div>
                   <div className="workshop-card-footer">
                     <span className="workshop-card-price">{ws.price}</span>
-                    <button className="workshop-card-detail-btn">
-                      Xem chi tiết <ArrowIcon />
-                    </button>
+                    <button className="workshop-card-detail-btn" onClick={() => navigate(`/workshop/${ws.id}`)}>Xem chi tiết <ArrowIcon /></button>
                   </div>
                 </div>
               </div>
