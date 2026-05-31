@@ -1,16 +1,91 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Navigate, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { STORES } from '../data/stores'
+import { productApi } from '../api'
 import './ShopDetailPage.css'
+
+// ── Kiểu dữ liệu từ API ──────────────────────────────────────────────────────
+interface ApiProduct {
+  id: number | string
+  name: string
+  description?: string
+  price: number | string
+  category?: string
+  images?: string[]
+  rating?: number
+  ecoScore?: number
+  stock?: number
+}
+
+// ── Fallback mock (giữ lại 4 mẫu cố định) ───────────────────────────────────
+function toDisplayProduct(p: ApiProduct, storeSlug: string) {
+  return {
+    id: String(p.id),
+    name: p.name,
+    image: (p.images && p.images[0]) ?? 'https://placehold.co/400x300/e8f5e9/2d4b37?text=Sản+phẩm',
+    category: p.category ?? 'Thủ công mỹ nghệ',
+    price: typeof p.price === 'number' ? `${p.price.toLocaleString('vi-VN')}đ` : String(p.price),
+    rating: p.rating != null ? `⭐ ${p.rating}` : '⭐ 4.8',
+    slug: storeSlug,
+  }
+}
 
 export default function ShopDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const [activeTab, setActiveTab] = useState<'newest' | 'popular'>('newest')
 
+  // ── Dữ liệu sản phẩm ─────────────────────────────────────────────────────
+  const [apiProducts, setApiProducts] = useState<ReturnType<typeof toDisplayProduct>[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
+
   const store = STORES.find((s) => s.slug === slug)
   if (!store) return <Navigate to="/san-pham" replace />
+
+  // Lấy danh sách sản phẩm từ API, fallback về mock nếu lỗi / trống
+  useEffect(() => {
+    setLoadingProducts(true)
+    productApi
+      .getAll()
+      .then((res) => {
+        const raw: ApiProduct[] = res.data?.data ?? res.data ?? []
+        if (Array.isArray(raw) && raw.length > 0) {
+          // Chỉ hiển thị tối đa 4 sản phẩm
+          setApiProducts(raw.slice(0, 4).map((p) => toDisplayProduct(p, slug!)))
+        } else {
+          // Không có dữ liệu API → dùng mock
+          setApiProducts(
+            store.products.slice(0, 4).map((p) => ({
+              id: p.id,
+              name: p.name,
+              image: p.image,
+              category: p.category,
+              price: p.price,
+              rating: p.rating,
+              slug: slug!,
+            }))
+          )
+        }
+      })
+      .catch(() => {
+        // API lỗi → fallback mock
+        setApiProducts(
+          store.products.slice(0, 4).map((p) => ({
+            id: p.id,
+            name: p.name,
+            image: p.image,
+            category: p.category,
+            price: p.price,
+            rating: p.rating,
+            slug: slug!,
+          }))
+        )
+      })
+      .finally(() => setLoadingProducts(false))
+  }, [slug])
+
+  const displayProducts = apiProducts
 
   return (
     <div className="shop-detail-page">
@@ -41,7 +116,7 @@ export default function ShopDetailPage() {
                   <span className="store-stat-label">WORKSHOPS</span>
                 </div>
                 <div className="store-hero-stat">
-                  <span className="store-stat-value">{store.productCount}</span>
+                  <span className="store-stat-value">{displayProducts.length || store.productCount}</span>
                   <span className="store-stat-label">SẢN PHẨM</span>
                 </div>
               </div>
@@ -102,11 +177,6 @@ export default function ShopDetailPage() {
                           <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="#343434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </a>
-                      <a href="#" className="contact-social-icon" aria-label="Twitter">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" stroke="#343434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </a>
                       <a href="#" className="contact-social-icon" aria-label="Instagram">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                           <rect x="2" y="2" width="20" height="20" rx="5" stroke="#343434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -144,32 +214,45 @@ export default function ShopDetailPage() {
                 </div>
 
                 <div className="products-grid">
-                  {store.products.map((product) => (
-                    <div key={product.id} className="product-card">
-                      <div className="product-img-wrapper">
-                        <img src={product.image} alt={product.name} className="product-card-img" />
-                        <span className="product-rating-badge">{product.rating}</span>
-                      </div>
-                      <div className="product-card-body">
-                        <h3 className="product-card-name">{product.name}</h3>
-                        <p className="product-card-category">{product.category}</p>
-                        <div className="product-card-footer">
-                          <span className="product-card-price">{product.price}</span>
-                          <Link
-                            to={`/cua-hang/${slug}/san-pham/${product.id}`}
-                            className="product-add-to-cart-btn"
-                            aria-label="Thêm vào giỏ hàng"
-                          >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                              <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </Link>
+                  {loadingProducts ? (
+                    // Skeleton placeholders
+                    Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="product-card product-card--skeleton">
+                        <div className="skeleton-img" />
+                        <div className="product-card-body">
+                          <div className="skeleton-line skeleton-line--long" />
+                          <div className="skeleton-line skeleton-line--short" />
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    displayProducts.map((product) => (
+                      <div key={product.id} className="product-card">
+                        <div className="product-img-wrapper">
+                          <img src={product.image} alt={product.name} className="product-card-img" />
+                          <span className="product-rating-badge">{product.rating}</span>
+                        </div>
+                        <div className="product-card-body">
+                          <h3 className="product-card-name">{product.name}</h3>
+                          <p className="product-card-category">{product.category}</p>
+                          <div className="product-card-footer">
+                            <span className="product-card-price">{product.price}</span>
+                            <Link
+                              to={`/cua-hang/${slug}/san-pham/${product.id}`}
+                              className="product-add-to-cart-btn"
+                              aria-label="Xem sản phẩm"
+                            >
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </section>
 
@@ -203,7 +286,6 @@ export default function ShopDetailPage() {
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                               <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="rgba(52,52,52,0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                               <circle cx="9" cy="7" r="4" stroke="rgba(52,52,52,0.6)" strokeWidth="2" />
-                              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="rgba(52,52,52,0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             Tối đa {workshop.maxParticipants} người
                           </span>

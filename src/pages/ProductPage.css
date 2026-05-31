@@ -592,7 +592,77 @@
   background: #3b823e;
 }
 
+/* ─── Loading state ─── */
+.product-loading-wrap {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.product-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #d4e8d4;
+  border-top-color: #3b823e;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.product-loading-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(52, 52, 52, 0.6);
+  margin: 0;
+}
+
+/* ─── Stock badge ─── */
+.product-stock {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b823e;
+  background: #e8f5e9;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* ─── Story block (from getStory) ─── */
+.product-story-block {
+  width: 100%;
+  background: #f0f5f0;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: left;
+}
+
+.product-story-heading {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #01370c;
+  margin: 0 0 6px;
+}
+
+.product-story-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(52, 52, 52, 0.78);
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ─── Responsive ─── */
+
 @media (max-width: 1024px) {
   .product-container {
     padding: 32px 24px;

@@ -1,12 +1,57 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Navigate, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { STORES } from '../data/stores'
+import { productApi } from '../api'
 import './ProductPage.css'
 
 const QR_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/cec258ae061b5ddf61aad0c38263fac3ffcc464f?width=200'
 const CRAFT_IMG = 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=800'
+
+// ── Kiểu từ API ───────────────────────────────────────────────────────────────
+interface ApiProduct {
+  id: number | string
+  name: string
+  description?: string
+  price: number | string
+  stock?: number
+  category?: string
+  materials?: string[] | { name: string; percentage: number }[]
+  story?: string
+  images?: string[]
+  rating?: number
+  ecoScore?: number
+}
+
+interface ApiStory {
+  story?: string
+  content?: string
+  text?: string
+}
+
+// ── Helper: chuẩn hoá materials về dạng { name, percentage } ─────────────────
+function normalizeMaterials(raw: ApiProduct['materials']): { name: string; percentage: number }[] {
+  if (!raw || raw.length === 0) {
+    return [
+      { name: 'Vật liệu tái chế', percentage: 75 },
+      { name: 'Vật liệu tự nhiên', percentage: 25 },
+    ]
+  }
+  if (typeof raw[0] === 'string') {
+    // backend trả về string[]
+    const arr = raw as string[]
+    const share = Math.floor(100 / arr.length)
+    return arr.map((n, i) => ({ name: n, percentage: i === arr.length - 1 ? 100 - share * i : share }))
+  }
+  return raw as { name: string; percentage: number }[]
+}
+
+// ── Helper: format giá ────────────────────────────────────────────────────────
+function formatPrice(p: number | string): string {
+  if (typeof p === 'number') return `${p.toLocaleString('vi-VN')}đ`
+  return String(p)
+}
 
 export default function ProductPage() {
   const { storeSlug, productId } = useParams<{ storeSlug: string; productId: string }>()
@@ -14,27 +59,124 @@ export default function ProductPage() {
   const [note, setNote] = useState('')
   const [activeThumb, setActiveThumb] = useState(0)
 
+  // ── State API ─────────────────────────────────────────────────────────────
+  const [apiProduct, setApiProduct] = useState<ApiProduct | null>(null)
+  const [story, setStory] = useState<string>('')
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
+
   const store = STORES.find((s) => s.slug === storeSlug)
+  const mockProduct = store?.products.find((p) => p.id === productId)
+
+  // Gọi getById
+  useEffect(() => {
+    if (!productId) return
+    setLoading(true)
+    productApi
+      .getById(productId)
+      .then((res) => {
+        const data: ApiProduct = res.data?.data ?? res.data
+        if (data && data.id) {
+          setApiProduct(data)
+        } else {
+          // Không tìm thấy ở API → dùng mock
+          setApiProduct(null)
+        }
+      })
+      .catch(() => {
+        setApiProduct(null) // fallback mock
+      })
+      .finally(() => setLoading(false))
+  }, [productId])
+
+  // Gọi getStory (song song với getById, không block UI)
+  useEffect(() => {
+    if (!productId) return
+    productApi
+      .getStory(productId)
+      .then((res) => {
+        const data: ApiStory = res.data?.data ?? res.data
+        const text = data?.story ?? data?.content ?? data?.text ?? ''
+        if (text) setStory(text)
+      })
+      .catch(() => {
+        // không có story từ API → fallback vào product.story hoặc ''
+      })
+  }, [productId])
+
+  // ── Resolve dữ liệu hiển thị ─────────────────────────────────────────────
+  const resolvedProduct = apiProduct
+    ? {
+        id: String(apiProduct.id),
+        name: apiProduct.name,
+        description: apiProduct.description ?? mockProduct?.description ?? '',
+        price: formatPrice(apiProduct.price),
+        category: apiProduct.category ?? mockProduct?.category ?? '',
+        images: apiProduct.images?.length ? apiProduct.images : (mockProduct?.thumbnails ?? [mockProduct?.image ?? CRAFT_IMG]),
+        rating: apiProduct.rating ?? mockProduct?.rating ?? '⭐ 4.8',
+        ecoScore: apiProduct.ecoScore ?? mockProduct?.ecoScore ?? 90,
+        materials: normalizeMaterials(apiProduct.materials),
+        story: apiProduct.story ?? mockProduct?.description ?? '',
+        details: mockProduct?.details ?? [
+          'Kích thước: 28cm | Rộng nhất: 14cm | Nặng: 1.2kg',
+          'Chống thấm nước 100%, phù hợp cho hoa tươi',
+          'Men không chì, không độc hại từ thực vật',
+        ],
+        craftNote: mockProduct?.craftNote,
+        stock: apiProduct.stock,
+      }
+    : mockProduct
+    ? {
+        id: mockProduct.id,
+        name: mockProduct.name,
+        description: mockProduct.description ?? '',
+        price: mockProduct.price,
+        category: mockProduct.category,
+        images: mockProduct.thumbnails ?? [mockProduct.image],
+        rating: mockProduct.rating,
+        ecoScore: mockProduct.ecoScore ?? 90,
+        materials: normalizeMaterials(undefined),
+        story: '',
+        details: mockProduct.details ?? [
+          'Kích thước: 28cm | Rộng nhất: 14cm | Nặng: 1.2kg',
+          'Chống thấm nước 100%, phù hợp cho hoa tươi',
+          'Men không chì, không độc hại từ thực vật',
+        ],
+        craftNote: mockProduct.craftNote,
+        stock: undefined as number | undefined,
+      }
+    : null
+
+  // ── Xử lý trường hợp không tìm thấy store ────────────────────────────────
   if (!store) return <Navigate to="/san-pham" replace />
 
-  const product = store.products.find((p) => p.id === productId)
-  if (!product) return <Navigate to={`/cua-hang/${storeSlug}`} replace />
+  // ── Loading ────────────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="product-page">
+        <Header activePage="products" />
+        <main className="product-main">
+          <div className="product-container product-loading-wrap">
+            <div className="product-loading-spinner" />
+            <p className="product-loading-text">Đang tải thông tin sản phẩm...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
-  const thumbnails = product.thumbnails ?? [product.image]
-  const relatedProducts = store.products.filter((p) => p.id !== product.id).slice(0, 4)
+  // ── Không tìm thấy cả API lẫn mock ────────────────────────────────────────
+  if (!resolvedProduct && notFound) return <Navigate to={`/cua-hang/${storeSlug}`} replace />
+  if (!resolvedProduct) return <Navigate to={`/cua-hang/${storeSlug}`} replace />
 
-  const materials = product.materials ?? [
-    { name: 'Vật liệu tái chế', percentage: 75 },
-    { name: 'Vật liệu tự nhiên', percentage: 25 },
-  ]
+  const thumbnails = resolvedProduct.images
+  const storyText = story || resolvedProduct.story || ''
 
-  const details = product.details ?? [
-    'Kích thước: 28cm | Rộng nhất: 14cm | Nặng: 1.2kg',
-    'Chống thấm nước 100%, phù hợp cho hoa tươi',
-    'Men không chì, không độc hại từ trực thực vật',
-  ]
-
-  const ecoScore = product.ecoScore ?? 90
+  // Related products: dùng mock để không block
+  const relatedProducts = (store.products || [])
+    .filter((p) => p.id !== productId)
+    .slice(0, 4)
 
   return (
     <div className="product-page">
@@ -49,7 +191,7 @@ export default function ProductPage() {
               <div className="product-main-image-wrapper">
                 <img
                   src={thumbnails[activeThumb]}
-                  alt={product.name}
+                  alt={resolvedProduct.name}
                   className="product-main-image"
                 />
               </div>
@@ -69,17 +211,23 @@ export default function ProductPage() {
 
             <div className="product-info">
               <div className="product-info-header">
-                <h1 className="product-title">{product.name}</h1>
+                <h1 className="product-title">{resolvedProduct.name}</h1>
                 <span className="product-eco-badge">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M12 2C6 2 2 8 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10C22 6.5 17.5 2 12 2z" fill="#3b823e" />
                     <path d="M8 12l3 3 6-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  Eco Score: {ecoScore}/100
+                  Eco Score: {resolvedProduct.ecoScore}/100
                 </span>
               </div>
 
-              <p className="product-price">{product.price}</p>
+              <p className="product-price">{resolvedProduct.price}</p>
+
+              {resolvedProduct.stock !== undefined && (
+                <p className="product-stock">
+                  {resolvedProduct.stock > 0 ? `Còn ${resolvedProduct.stock} sản phẩm` : 'Hết hàng'}
+                </p>
+              )}
 
               <div className="product-creator">
                 <img src={store.avatarImage} alt={store.name} className="product-creator-avatar" />
@@ -89,8 +237,8 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              {product.description && (
-                <p className="product-description">{product.description}</p>
+              {resolvedProduct.description && (
+                <p className="product-description">{resolvedProduct.description}</p>
               )}
 
               <div className="product-purchase-row">
@@ -147,6 +295,13 @@ export default function ProductPage() {
                 <img src={QR_IMG} alt="QR Code hành trình tái chế" className="product-qr-img" />
               </div>
               <p className="product-qr-label">Quét để xem thêm về hành trình tái chế</p>
+              {/* Câu chuyện sản phẩm từ getStory */}
+              {storyText && (
+                <div className="product-story-block">
+                  <h3 className="product-story-heading">Câu chuyện sản phẩm</h3>
+                  <p className="product-story-text">{storyText}</p>
+                </div>
+              )}
               <a href="#" className="product-recycle-link">Hoặc xem hành trình trên tại đây</a>
             </div>
 
@@ -157,7 +312,7 @@ export default function ProductPage() {
                   Sản phẩm được tạo tác từ sự pha trộn độc đáo giữa các vật liệu bền vững, thu gom từ các công trường và phú sa hữu cơ tự nhiên.
                 </p>
                 <div className="product-materials-grid">
-                  {materials.map((mat, i) => (
+                  {resolvedProduct.materials.map((mat, i) => (
                     <div key={i} className="product-material-item">
                       <span className="product-material-icon" aria-hidden="true">
                         {i === 0 ? (
@@ -172,7 +327,7 @@ export default function ProductPage() {
                         )}
                       </span>
                       <div>
-                        <p className="product-material-pct">NỀN TẢNG</p>
+                        <p className="product-material-pct">THÀNH PHẦN</p>
                         <p className="product-material-name">{mat.percentage}% {mat.name}</p>
                       </div>
                     </div>
@@ -180,10 +335,10 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              {product.craftNote && (
+              {resolvedProduct.craftNote && (
                 <div className="product-craft-section">
                   <h2 className="product-detail-heading">Sự tinh xảo thủ công</h2>
-                  <p className="product-craft-desc">{product.craftNote}</p>
+                  <p className="product-craft-desc">{resolvedProduct.craftNote}</p>
                   <img src={CRAFT_IMG} alt="Thủ công mỹ nghệ" className="product-craft-img" />
                 </div>
               )}
@@ -191,7 +346,7 @@ export default function ProductPage() {
               <div className="product-specs-section">
                 <h2 className="product-detail-heading">Kích thước &amp; Chi tiết</h2>
                 <ul className="product-specs-list">
-                  {details.map((d, i) => (
+                  {resolvedProduct.details.map((d, i) => (
                     <li key={i} className="product-spec-item">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <polyline points="20 6 9 17 4 12" stroke="#3b823e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -205,7 +360,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Related products */}
+        {/* Related products (từ mock) */}
         {relatedProducts.length > 0 && (
           <section className="product-related-section">
             <div className="product-related-inner">
