@@ -31,7 +31,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                 </defs>
               </svg>
             </Link>
-            <a href="#" className="header-icon-link" aria-label="Tài khoản">
+            <Link to="/dang-nhap" className="header-icon-link" aria-label="Tài khoản">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <g clipPath="url(#user-clip)">
                   <mask id="user-mask" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
@@ -47,7 +47,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                   </clipPath>
                 </defs>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

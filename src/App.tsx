@@ -4,6 +4,7 @@ import ShopListPage from './pages/ShopListPage'
 import ShopDetailPage from './pages/ShopDetailPage'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
+import LoginPage from './pages/LoginPage'
 import WorkshopListPage from './pages/WorkshopListPage'
 import WorkshopDetailPage from './pages/WorkshopDetailPage'
 
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/cua-hang/:slug" element={<ShopDetailPage />} />
         <Route path="/cua-hang/:storeSlug/san-pham/:productId" element={<ProductPage />} />
         <Route path="/gio-hang" element={<CartPage />} />
+        <Route path="/dang-nhap" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   )
