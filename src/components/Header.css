@@ -43,6 +43,32 @@
   text-decoration: none;
 }
 
+/* Nút Seller UI */
+.header-seller-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: rgba(217, 119, 6, 0.15);
+  border: 1px solid rgba(217, 119, 6, 0.5);
+  color: #FCD34D;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.header-seller-btn:hover {
+  background: rgba(217, 119, 6, 0.28);
+  border-color: rgba(217, 119, 6, 0.8);
+  transform: translateY(-1px);
+}
+
+
 .main-nav {
   background: #fff;
   padding: 0 120px;

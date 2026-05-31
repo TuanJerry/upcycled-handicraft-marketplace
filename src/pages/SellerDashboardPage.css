@@ -1,0 +1,105 @@
+.seller-placeholder {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #F9F7F2 0%, #EEF4EE 100%);
+  padding: 32px 16px;
+}
+
+.seller-placeholder__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 480px;
+  width: 100%;
+  padding: 48px 40px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(45, 75, 55, 0.1), 0 4px 16px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.seller-placeholder__badge {
+  display: inline-flex;
+  padding: 4px 16px;
+  border-radius: 9999px;
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  color: #D97706;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.seller-placeholder__icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  background: rgba(217, 119, 6, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seller-placeholder__title {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2D4B37;
+  line-height: 36px;
+}
+
+.seller-placeholder__desc {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(45, 75, 55, 0.65);
+  line-height: 1.6;
+}
+
+.seller-placeholder__features {
+  list-style: none;
+  margin: 0;
+  padding: 16px 24px;
+  background: #F9F7F2;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.seller-placeholder__features li {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.seller-placeholder__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 12px;
+  background: #2D4B37;
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.seller-placeholder__back-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}

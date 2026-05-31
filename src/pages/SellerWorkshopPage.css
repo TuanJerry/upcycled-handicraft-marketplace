@@ -1,0 +1,668 @@
+/* ===== Layout ===== */
+.seller-page {
+  display: flex;
+  min-height: 100vh;
+  background: #FAF9F6;
+  font-family: 'Plus Jakarta Sans', -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+/* ===== Sidebar ===== */
+.seller-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 280px;
+  flex-shrink: 0;
+  padding: 32px;
+  background: #01370C;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.seller-sidebar__top {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.seller-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.seller-sidebar__logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.seller-sidebar__brand-name {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: -0.5px;
+}
+
+.seller-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seller-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.047px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.seller-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.seller-nav-item--active {
+  background: #436E35;
+  font-weight: 600;
+}
+
+.seller-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #FCA5A5;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.047px;
+}
+
+/* Nút về Buyer UI */
+.seller-buyer-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.seller-buyer-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* ===== Main content ===== */
+.seller-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+  background: #F0F5F0;
+  min-height: 100vh;
+}
+
+/* ===== Page header ===== */
+.seller-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.seller-page-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seller-page-title {
+  margin: 0;
+  color: #2D3E2F;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 60px;
+  letter-spacing: 0.039px;
+}
+
+.seller-page-subtitle {
+  margin: 0;
+  color: #436E35;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.seller-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.seller-search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(52, 52, 52, 0.20);
+  background: #fff;
+}
+
+.seller-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2D3E2F;
+  background: transparent;
+}
+
+.seller-search-input::placeholder {
+  color: #9CA3AF;
+}
+
+.seller-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #3B823E;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -4px rgba(0, 0, 0, 0.10);
+  transition: background 0.15s;
+}
+
+.seller-add-btn:hover {
+  background: #2d6830;
+}
+
+.seller-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ===== Stats grid ===== */
+.workshop-stats-grid {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.workshop-stat-card {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 144px;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.50);
+  background: #fff;
+  box-shadow: 0 8px 24px 0 rgba(80, 107, 82, 0.08);
+}
+
+.workshop-stat-card--featured {
+  background: #3B823E;
+  border-color: transparent;
+  box-shadow: 0 8px 24px 0 rgba(1, 55, 12, 0.15);
+}
+
+.workshop-stat-card__icon-wrap {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+}
+
+.workshop-stat-card__icon-wrap--green-light { background: #F0F5F0; }
+.workshop-stat-card__icon-wrap--amber       { background: #FFF9EB; }
+.workshop-stat-card__icon-wrap--indigo      { background: #EEF2FF; }
+.workshop-stat-card__icon-wrap--white-overlay { background: rgba(255, 255, 255, 0.20); }
+
+.workshop-stat-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workshop-stat-card__label {
+  margin: 0;
+  color: rgba(52, 52, 52, 0.60);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+}
+
+.workshop-stat-card__label--light {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+.workshop-stat-card__value {
+  margin: 0;
+  color: #2D3E2F;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0.2px;
+}
+
+.workshop-stat-card__value--featured {
+  color: #fff;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0.123px;
+}
+
+/* ===== Workshop list card ===== */
+.workshop-list-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 40px 32px 32px;
+  border-radius: 32px;
+  background: #fff;
+  box-shadow: 0 12px 40px 0 rgba(80, 107, 82, 0.10);
+}
+
+.workshop-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.workshop-list-title {
+  margin: 0;
+  color: #2D3E2F;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0.023px;
+}
+
+.workshop-list-filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.workshop-status-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #FAF9F6;
+  color: #436E35;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+/* ===== Workshop rows ===== */
+.workshop-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.workshop-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 17px;
+  border-radius: 20px;
+  border: 1px solid #F0F5F0;
+  background: #fff;
+}
+
+.workshop-row--cancelled {
+  border: 1px dashed #D1D5DB;
+  background: rgba(249, 250, 251, 0.50);
+}
+
+.workshop-row__thumb-wrap {
+  flex-shrink: 0;
+  width: 120px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.workshop-row__thumb-wrap--faded {
+  opacity: 0.5;
+}
+
+.workshop-row__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.workshop-row__info {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workshop-row__name {
+  margin: 0;
+  color: #2D3E2F;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.workshop-row__name--muted {
+  color: #6B7280;
+}
+
+.workshop-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workshop-type-badge {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: 0.146px;
+  text-transform: uppercase;
+}
+
+.workshop-type-badge--offline {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.workshop-type-badge--online {
+  background: #EFF6FF;
+  color: #3B82F6;
+}
+
+.workshop-row__location {
+  color: rgba(52, 52, 52, 0.60);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.workshop-row__schedule {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.workshop-row__date {
+  color: #2D3E2F;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.workshop-row__date--muted {
+  color: #6B7280;
+}
+
+.workshop-row__time {
+  color: rgba(52, 52, 52, 0.60);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.workshop-row__registration {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.registration-count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 120px;
+}
+
+.registration-count {
+  color: #343434;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.registration-label {
+  color: rgba(52, 52, 52, 0.60);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+.registration-progress {
+  width: 120px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #F0F5F0;
+  overflow: hidden;
+}
+
+.registration-progress__bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: #3B823E;
+}
+
+.workshop-row__cancelled-count {
+  color: #6B7280;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.workshop-row__status-col {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+}
+
+.workshop-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5.5px 16px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.15px;
+  white-space: nowrap;
+}
+
+.workshop-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.workshop-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.workshop-action-btn:hover {
+  opacity: 1;
+}
+
+.workshop-action-btn--circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 1px solid #F0F5F0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.workshop-impact-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border: 1px solid #E5E7EB;
+  background: #F3F4F6;
+  color: #9CA3AF;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16.5px;
+  letter-spacing: 0.064px;
+}
+
+/* ===== Load more ===== */
+.workshop-load-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+}
+
+.workshop-load-more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #436E35;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.031px;
+  transition: opacity 0.15s;
+}
+
+.workshop-load-more-btn:hover {
+  opacity: 0.75;
+}
+
+/* ===== Footer ===== */
+.seller-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 48px;
+  margin: 0 -40px -40px;
+  background: #01370C;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.seller-footer__copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.80);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.seller-footer__payments {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  opacity: 0.6;
+}
+
+.seller-footer__amex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  border-radius: 2px;
+  background: #006FCF;
+}
+
+.seller-footer__rupay {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}

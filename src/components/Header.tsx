@@ -14,11 +14,14 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const [username, setUsername] = useState('')
+  const [isSeller, setIsSeller] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsLoggedIn(!!token)
     setUsername(localStorage.getItem('username') ?? '')
+    const roles: string[] = JSON.parse(localStorage.getItem('roles') ?? '[]')
+    setIsSeller(roles.includes('SELLER'))
   }, [])
 
   useEffect(() => {
@@ -51,6 +54,16 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             Chào mừng bạn đến với cộng đồng sống xanh!
           </span>
           <div className="header-actions">
+            {/* Nút Seller UI — hiện khi đã đăng nhập */}
+            {isLoggedIn && (
+              <Link to="/seller" className="header-seller-btn" aria-label="Vào Seller UI">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 1.667a8.333 8.333 0 100 16.666A8.333 8.333 0 0010 1.667zm1.667 9.166H10v1.667H8.333v-1.667H6.667V9.167h1.666V7.5H10v1.667h1.667v1.666z" fill="currentColor"/>
+                </svg>
+                Seller UI
+              </Link>
+            )}
+
             <Link to="/gio-hang" className="header-icon-link" aria-label="Giỏ hàng">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <g clipPath="url(#cart-clip)">

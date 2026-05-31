@@ -85,3 +85,48 @@
   align-self: flex-start;
   margin-left: 16px;
 }
+
+/* ── Seller activation ── */
+.user-dropdown__icon-wrap--amber {
+  background: #FFFBEB;
+}
+
+.user-dropdown__item--seller {
+  width: 100%;
+}
+
+.user-dropdown__item--seller:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.user-dropdown__seller-label {
+  color: #D97706;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  letter-spacing: 0.164px;
+}
+
+.user-dropdown__seller-msg {
+  margin: 0 16px 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  align-self: stretch;
+}
+
+.user-dropdown__seller-msg--success {
+  background: #ECFDF5;
+  color: #065F46;
+}
+
+.user-dropdown__seller-msg--error {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+

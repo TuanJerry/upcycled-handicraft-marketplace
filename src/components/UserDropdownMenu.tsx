@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { authApi } from '../api'
 import './UserDropdownMenu.css'
 
 interface UserDropdownMenuProps {
@@ -6,6 +8,37 @@ interface UserDropdownMenuProps {
 }
 
 export default function UserDropdownMenu({ onLogout }: UserDropdownMenuProps) {
+  // Đọc roles từ localStorage để kiểm tra đã là Seller chưa
+  const rolesRaw = localStorage.getItem('roles')
+  const roles: string[] = rolesRaw ? JSON.parse(rolesRaw) : []
+  const isSeller = roles.includes('SELLER')
+
+  const [sellerLoading, setSellerLoading] = useState(false)
+  const [sellerMsg, setSellerMsg] = useState('')
+
+  async function handleRegisterSeller() {
+    setSellerLoading(true)
+    setSellerMsg('')
+    try {
+      const res = await authApi.registerSeller()
+      // Cập nhật roles mới vào localStorage
+      const updatedUser = res.data.data ?? res.data
+      if (updatedUser?.roles) {
+        localStorage.setItem('roles', JSON.stringify(updatedUser.roles))
+      }
+      setSellerMsg('✓ Đã kích hoạt vai trò Seller!')
+      // Reload để Header cập nhật lại trạng thái
+      setTimeout(() => window.location.reload(), 1000)
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Kích hoạt thất bại, thử lại sau'
+      setSellerMsg(msg)
+    } finally {
+      setSellerLoading(false)
+    }
+  }
+
   return (
     <div className="user-dropdown">
       <div className="user-dropdown__panel">
@@ -27,6 +60,32 @@ export default function UserDropdownMenu({ onLogout }: UserDropdownMenuProps) {
             </div>
             <span className="user-dropdown__label">Quản lý Workshop</span>
           </Link>
+
+          {/* ── Kích hoạt Seller — chỉ hiện khi chưa là Seller ── */}
+          {!isSeller && (
+            <>
+              <div className="user-dropdown__divider" />
+              <button
+                className="user-dropdown__item user-dropdown__item--seller"
+                onClick={handleRegisterSeller}
+                disabled={sellerLoading}
+              >
+                <div className="user-dropdown__icon-wrap user-dropdown__icon-wrap--amber">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 1.667a8.333 8.333 0 100 16.666A8.333 8.333 0 0010 1.667zm.833 12.5H9.167v-5h1.666v5zm0-6.667H9.167V5.833h1.666V7.5z" fill="#D97706"/>
+                  </svg>
+                </div>
+                <span className="user-dropdown__seller-label">
+                  {sellerLoading ? 'Đang kích hoạt...' : 'Trở thành Seller'}
+                </span>
+              </button>
+              {sellerMsg && (
+                <p className={`user-dropdown__seller-msg${sellerMsg.startsWith('✓') ? ' user-dropdown__seller-msg--success' : ' user-dropdown__seller-msg--error'}`}>
+                  {sellerMsg}
+                </p>
+              )}
+            </>
+          )}
 
           <div className="user-dropdown__divider" />
 
