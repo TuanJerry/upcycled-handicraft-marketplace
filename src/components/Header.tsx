@@ -14,7 +14,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             Chào mừng bạn đến với cộng đồng sống xanh!
           </span>
           <div className="header-actions">
-            <a href="#" className="header-icon-link" aria-label="Giỏ hàng">
+            <Link to="/gio-hang" className="header-icon-link" aria-label="Giỏ hàng">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <g clipPath="url(#cart-clip)">
                   <mask id="cart-mask" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
@@ -30,7 +30,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                   </clipPath>
                 </defs>
               </svg>
-            </a>
+            </Link>
             <a href="#" className="header-icon-link" aria-label="Tài khoản">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <g clipPath="url(#user-clip)">
