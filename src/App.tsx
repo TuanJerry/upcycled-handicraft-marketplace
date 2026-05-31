@@ -7,6 +7,7 @@ import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
 import WorkshopListPage from './pages/WorkshopListPage'
 import WorkshopDetailPage from './pages/WorkshopDetailPage'
+import OrderListPage from './pages/OrderListPage'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/cua-hang/:storeSlug/san-pham/:productId" element={<ProductPage />} />
         <Route path="/gio-hang" element={<CartPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
+        <Route path="/quan-ly-don-hang" element={<OrderListPage />} />
       </Routes>
     </BrowserRouter>
   )

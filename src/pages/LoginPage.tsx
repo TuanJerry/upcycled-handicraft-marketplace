@@ -1,14 +1,21 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './LoginPage.css'
 
 type Tab = 'login' | 'register'
 
 export default function LoginPage() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('login')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    localStorage.setItem('isLoggedIn', 'true')
+    navigate('/')
+  }
 
   return (
     <div className="auth-page">
@@ -93,7 +100,7 @@ export default function LoginPage() {
                 <p className="auth-form-subtitle">Tiếp tục hành trình mua sắm bền vững của bạn</p>
               </div>
 
-              <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+              <form className="auth-form" onSubmit={handleLogin}>
                 <div className="auth-field">
                   <label className="auth-field-label" htmlFor="login-email">Email</label>
                   <div className="auth-input-wrapper">

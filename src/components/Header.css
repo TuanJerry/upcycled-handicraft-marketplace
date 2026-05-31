@@ -117,6 +117,44 @@
   flex: 1;
 }
 
+.header-user-wrap {
+  position: relative;
+}
+
+.header-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #fff;
+}
+
+.header-username {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.header-chevron {
+  transition: transform 0.2s ease;
+}
+
+.header-chevron--open {
+  transform: rotate(180deg);
+}
+
+.header-dropdown-anchor {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 200;
+}
+
 @media (max-width: 1024px) {
   .announcement-bar,
   .main-nav {

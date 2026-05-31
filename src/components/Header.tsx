@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import UserDropdownMenu from './UserDropdownMenu'
 import './Header.css'
 
 interface HeaderProps {
@@ -6,6 +8,34 @@ interface HeaderProps {
 }
 
 export default function Header({ activePage = 'home' }: HeaderProps) {
+  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true')
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [dropdownOpen])
+
+  function handleLogout() {
+    localStorage.removeItem('isLoggedIn')
+    setIsLoggedIn(false)
+    setDropdownOpen(false)
+    navigate('/dang-nhap')
+  }
+
   return (
     <header className="site-header">
       <div className="announcement-bar">
@@ -31,23 +61,60 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                 </defs>
               </svg>
             </Link>
-            <Link to="/dang-nhap" className="header-icon-link" aria-label="Tài khoản">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <g clipPath="url(#user-clip)">
-                  <mask id="user-mask" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
-                    <path d="M20 0H0V20H20V0Z" fill="white" />
-                  </mask>
-                  <g mask="url(#user-mask)">
-                    <path d="M9.99996 1.66667C5.39996 1.66667 1.66663 5.4 1.66663 10C1.66663 14.6 5.39996 18.3333 9.99996 18.3333C14.6 18.3333 18.3333 14.6 18.3333 10C18.3333 5.4 14.6 1.66667 9.99996 1.66667ZM5.89163 15.2333C6.24996 14.4833 8.43329 13.75 9.99996 13.75C11.5666 13.75 13.7583 14.4833 14.1083 15.2333C12.975 16.1333 11.55 16.6667 9.99996 16.6667C8.44996 16.6667 7.02496 16.1333 5.89163 15.2333ZM15.3 14.025C14.1083 12.575 11.2166 12.0833 9.99996 12.0833C8.78329 12.0833 5.89163 12.575 4.69996 14.025C3.84996 12.9083 3.33329 11.5167 3.33329 10C3.33329 6.325 6.32496 3.33333 9.99996 3.33333C13.675 3.33333 16.6666 6.325 16.6666 10C16.6666 11.5167 16.15 12.9083 15.3 14.025ZM9.99996 5C8.38329 5 7.08329 6.3 7.08329 7.91667C7.08329 9.53333 8.38329 10.8333 9.99996 10.8333C11.6166 10.8333 12.9166 9.53333 12.9166 7.91667C12.9166 6.3 11.6166 5 9.99996 5ZM9.99996 9.16667C9.30829 9.16667 8.74996 8.60833 8.74996 7.91667C8.74996 7.225 9.30829 6.66667 9.99996 6.66667C10.6916 6.66667 11.25 7.225 11.25 7.91667C11.25 8.60833 10.6916 9.16667 9.99996 9.16667Z" fill="white" />
+
+            {isLoggedIn ? (
+              <div className="header-user-wrap" ref={dropdownRef}>
+                <button
+                  className="header-user-btn"
+                  onClick={() => setDropdownOpen(prev => !prev)}
+                  aria-label="Tài khoản"
+                  aria-expanded={dropdownOpen}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <g clipPath="url(#user-clip2)">
+                      <mask id="user-mask2" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                        <path d="M20 0H0V20H20V0Z" fill="white" />
+                      </mask>
+                      <g mask="url(#user-mask2)">
+                        <path d="M9.99996 1.66667C5.39996 1.66667 1.66663 5.4 1.66663 10C1.66663 14.6 5.39996 18.3333 9.99996 18.3333C14.6 18.3333 18.3333 14.6 18.3333 10C18.3333 5.4 14.6 1.66667 9.99996 1.66667ZM5.89163 15.2333C6.24996 14.4833 8.43329 13.75 9.99996 13.75C11.5666 13.75 13.7583 14.4833 14.1083 15.2333C12.975 16.1333 11.55 16.6667 9.99996 16.6667C8.44996 16.6667 7.02496 16.1333 5.89163 15.2333ZM15.3 14.025C14.1083 12.575 11.2166 12.0833 9.99996 12.0833C8.78329 12.0833 5.89163 12.575 4.69996 14.025C3.84996 12.9083 3.33329 11.5167 3.33329 10C3.33329 6.325 6.32496 3.33333 9.99996 3.33333C13.675 3.33333 16.6666 6.325 16.6666 10C16.6666 11.5167 16.15 12.9083 15.3 14.025ZM9.99996 5C8.38329 5 7.08329 6.3 7.08329 7.91667C7.08329 9.53333 8.38329 10.8333 9.99996 10.8333C11.6166 10.8333 12.9166 9.53333 12.9166 7.91667C12.9166 6.3 11.6166 5 9.99996 5ZM9.99996 9.16667C9.30829 9.16667 8.74996 8.60833 8.74996 7.91667C8.74996 7.225 9.30829 6.66667 9.99996 6.66667C10.6916 6.66667 11.25 7.225 11.25 7.91667C11.25 8.60833 10.6916 9.16667 9.99996 9.16667Z" fill="white" />
+                      </g>
+                    </g>
+                    <defs>
+                      <clipPath id="user-clip2">
+                        <rect width="20" height="20" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span className="header-username">Nguyễn Văn A</span>
+                  <svg className={`header-chevron${dropdownOpen ? ' header-chevron--open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 4L6 8L10 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                {dropdownOpen && (
+                  <div className="header-dropdown-anchor">
+                    <UserDropdownMenu onLogout={handleLogout} />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/dang-nhap" className="header-icon-link" aria-label="Tài khoản">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clipPath="url(#user-clip)">
+                    <mask id="user-mask" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                      <path d="M20 0H0V20H20V0Z" fill="white" />
+                    </mask>
+                    <g mask="url(#user-mask)">
+                      <path d="M9.99996 1.66667C5.39996 1.66667 1.66663 5.4 1.66663 10C1.66663 14.6 5.39996 18.3333 9.99996 18.3333C14.6 18.3333 18.3333 14.6 18.3333 10C18.3333 5.4 14.6 1.66667 9.99996 1.66667ZM5.89163 15.2333C6.24996 14.4833 8.43329 13.75 9.99996 13.75C11.5666 13.75 13.7583 14.4833 14.1083 15.2333C12.975 16.1333 11.55 16.6667 9.99996 16.6667C8.44996 16.6667 7.02496 16.1333 5.89163 15.2333ZM15.3 14.025C14.1083 12.575 11.2166 12.0833 9.99996 12.0833C8.78329 12.0833 5.89163 12.575 4.69996 14.025C3.84996 12.9083 3.33329 11.5167 3.33329 10C3.33329 6.325 6.32496 3.33333 9.99996 3.33333C13.675 3.33333 16.6666 6.325 16.6666 10C16.6666 11.5167 16.15 12.9083 15.3 14.025ZM9.99996 5C8.38329 5 7.08329 6.3 7.08329 7.91667C7.08329 9.53333 8.38329 10.8333 9.99996 10.8333C11.6166 10.8333 12.9166 9.53333 12.9166 7.91667C12.9166 6.3 11.6166 5 9.99996 5ZM9.99996 9.16667C9.30829 9.16667 8.74996 8.60833 8.74996 7.91667C8.74996 7.225 9.30829 6.66667 9.99996 6.66667C10.6916 6.66667 11.25 7.225 11.25 7.91667C11.25 8.60833 10.6916 9.16667 9.99996 9.16667Z" fill="white" />
+                    </g>
                   </g>
-                </g>
-                <defs>
-                  <clipPath id="user-clip">
-                    <rect width="20" height="20" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </Link>
+                  <defs>
+                    <clipPath id="user-clip">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </Link>
+            )}
           </div>
         </div>
       </div>
