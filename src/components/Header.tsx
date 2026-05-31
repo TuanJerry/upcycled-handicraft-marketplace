@@ -64,7 +64,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
           <ul className="nav-menu">
             <li><Link to="/" className={`nav-link${activePage === 'home' ? ' nav-link--active' : ''}`}>Trang chủ</Link></li>
             <li><Link to="/san-pham" className={`nav-link${activePage === 'products' ? ' nav-link--active' : ''}`}>Sản phẩm</Link></li>
-            <li><a href="#workshop" className={`nav-link${activePage === 'workshop' ? ' nav-link--active' : ''}`}>Workshop</a></li>
+            <li><Link to="/workshop" className={`nav-link${activePage === 'workshop' ? ' nav-link--active' : ''}`}>Workshop</Link></li>
             <li><a href="#about" className={`nav-link${activePage === 'about' ? ' nav-link--active' : ''}`}>Về chúng tôi</a></li>
           </ul>
           <div className="search-bar">
