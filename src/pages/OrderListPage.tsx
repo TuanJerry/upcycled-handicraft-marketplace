@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { ORDERS } from '../data/orders'
+import type { OrderStatus } from '../data/orders'
 import './OrderListPage.css'
 
 const PRODUCT_IMG_1 = 'https://api.builder.io/api/v1/image/assets/TEMP/9e4201ddd87fd3215c7d5029b3859e671d65d22b?width=400'
@@ -14,61 +16,9 @@ const RECOMMENDATION_PRODUCTS = [
   { category: 'Nghệ thuật', name: 'Tranh kim loại tái chế', price: '450.000 VND', image: PRODUCT_IMG_2 },
 ]
 
-type OrderStatus = 'all' | 'shipping' | 'completed' | 'processing' | 'cancelled'
+type FilterStatus = 'all' | OrderStatus
 
-interface Order {
-  id: string
-  code: string
-  date: string
-  status: 'shipping' | 'completed' | 'processing' | 'cancelled'
-  statusLabel: string
-  seller: string
-  product: {
-    image: string
-    name: string
-    category: string
-    quantity: number
-  }
-  trackingNote: string
-  total: string
-}
-
-const ORDERS: Order[] = [
-  {
-    id: '1',
-    code: '#RECY-98231',
-    date: '12/05/2024',
-    status: 'shipping',
-    statusLabel: 'Đang giao hàng',
-    seller: 'EcoArt Studio',
-    product: {
-      image: PRODUCT_IMG_1,
-      name: 'Đèn bàn từ chai thủy tinh tái chế – Emerald Night',
-      category: 'Gỗ sồi tự nhiên',
-      quantity: 1,
-    },
-    trackingNote: 'Gói hàng đã đến trạm trung chuyển TP.HCM',
-    total: '350.000 VND',
-  },
-  {
-    id: '2',
-    code: '#RECY-87112',
-    date: '05/04/2024',
-    status: 'completed',
-    statusLabel: 'Đã hoàn thành',
-    seller: 'Green Weaver',
-    product: {
-      image: PRODUCT_IMG_2,
-      name: 'Túi xách từ bao tải dứa – Earth Collection',
-      category: 'Nâu Terra',
-      quantity: 1,
-    },
-    trackingNote: 'Cảm ơn bạn đã đồng hành cùng thời trang bền vững!',
-    total: '220.000 VND',
-  },
-]
-
-const STATUS_TABS: { key: OrderStatus; label: string }[] = [
+const STATUS_TABS: { key: FilterStatus; label: string }[] = [
   { key: 'all', label: 'Tất cả đơn' },
   { key: 'shipping', label: 'Đang giao (2)' },
   { key: 'completed', label: 'Hoàn thành' },
@@ -77,7 +27,7 @@ const STATUS_TABS: { key: OrderStatus; label: string }[] = [
 ]
 
 export default function OrderListPage() {
-  const [activeStatus, setActiveStatus] = useState<OrderStatus>('all')
+  const [activeStatus, setActiveStatus] = useState<FilterStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [wishlist, setWishlist] = useState<Set<number>>(new Set())
 
@@ -183,7 +133,7 @@ export default function OrderListPage() {
                         </div>
                       </div>
                       <div className="order-seller">
-                        Người bán: <strong>{order.seller}</strong>
+                        Người bán: <strong>{order.seller.name}</strong>
                       </div>
                     </div>
 
@@ -207,7 +157,9 @@ export default function OrderListPage() {
                           <span className="order-total-label">Tổng tiền</span>
                           <span className="order-total-value">{order.total}</span>
                         </div>
-                        <button className="order-detail-btn">Xem chi tiết</button>
+                        <Link to={`/don-hang/${order.id}`} className="order-detail-btn">
+                          Xem chi tiết
+                        </Link>
                       </div>
                     </div>
                   </div>

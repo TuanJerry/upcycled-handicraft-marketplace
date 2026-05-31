@@ -346,6 +346,7 @@
 }
 
 .order-detail-btn {
+  display: inline-block;
   padding: 10px 24px;
   background: #01370c;
   color: #fff;
@@ -356,6 +357,7 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
   transition: background 0.15s ease;
 }
 

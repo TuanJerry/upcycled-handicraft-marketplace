@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import WorkshopListPage from './pages/WorkshopListPage'
 import WorkshopDetailPage from './pages/WorkshopDetailPage'
 import OrderListPage from './pages/OrderListPage'
+import OrderDetailPage from './pages/OrderDetailPage'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/gio-hang" element={<CartPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/quan-ly-don-hang" element={<OrderListPage />} />
+        <Route path="/don-hang/:id" element={<OrderDetailPage />} />
       </Routes>
     </BrowserRouter>
   )
