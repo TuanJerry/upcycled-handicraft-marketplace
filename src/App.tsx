@@ -9,6 +9,7 @@ import WorkshopListPage from './pages/WorkshopListPage'
 import WorkshopDetailPage from './pages/WorkshopDetailPage'
 import OrderListPage from './pages/OrderListPage'
 import OrderDetailPage from './pages/OrderDetailPage'
+import MyWorkshopPage from './pages/MyWorkshopPage'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/quan-ly-don-hang" element={<OrderListPage />} />
         <Route path="/don-hang/:id" element={<OrderDetailPage />} />
+        <Route path="/quan-ly-workshop" element={<MyWorkshopPage />} />
       </Routes>
     </BrowserRouter>
   )
