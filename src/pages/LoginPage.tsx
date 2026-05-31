@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { authApi } from '../api'
 import './LoginPage.css'
 
 type Tab = 'login' | 'register'
@@ -11,10 +12,78 @@ export default function LoginPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
 
-  function handleLogin(e: React.FormEvent) {
+  // ─── Login state ──────────────────────────────────────────────────────────
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const [loginLoading, setLoginLoading] = useState(false)
+
+  // ─── Register state ───────────────────────────────────────────────────────
+  const [regUsername, setRegUsername] = useState('')
+  const [regEmail, setRegEmail] = useState('')
+  const [regPassword, setRegPassword] = useState('')
+  const [regConfirmPassword, setRegConfirmPassword] = useState('')
+  const [regError, setRegError] = useState('')
+  const [regLoading, setRegLoading] = useState(false)
+
+  // ─── Handlers ─────────────────────────────────────────────────────────────
+
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
-    localStorage.setItem('isLoggedIn', 'true')
-    navigate('/')
+    setLoginError('')
+    setLoginLoading(true)
+    try {
+      const res = await authApi.login({ email: loginEmail, password: loginPassword })
+      const { token, username, roles } = res.data.data ?? res.data
+
+      // Lưu thông tin user vào localStorage
+      localStorage.setItem('token', token)
+      localStorage.setItem('username', username)
+      localStorage.setItem('roles', JSON.stringify(roles))
+
+      navigate('/')
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Email hoặc mật khẩu không đúng'
+      setLoginError(msg)
+    } finally {
+      setLoginLoading(false)
+    }
+  }
+
+  async function handleRegister(e: React.FormEvent) {
+    e.preventDefault()
+    setRegError('')
+
+    if (regPassword !== regConfirmPassword) {
+      setRegError('Mật khẩu xác nhận không khớp')
+      return
+    }
+    if (regPassword.length < 6) {
+      setRegError('Mật khẩu phải có ít nhất 6 ký tự')
+      return
+    }
+
+    setRegLoading(true)
+    try {
+      const res = await authApi.register({ username: regUsername, email: regEmail, password: regPassword })
+      const { token, username, roles } = res.data.data ?? res.data
+
+      // Tự động đăng nhập sau khi đăng ký thành công
+      localStorage.setItem('token', token)
+      localStorage.setItem('username', username)
+      localStorage.setItem('roles', JSON.stringify(roles))
+
+      navigate('/')
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Đăng ký thất bại, vui lòng thử lại'
+      setRegError(msg)
+    } finally {
+      setRegLoading(false)
+    }
   }
 
   return (
@@ -38,7 +107,7 @@ export default function LoginPage() {
                 alt="CraftCycle logo"
                 className="auth-logo-img"
               />
-              <span className="auth-logo-name">CraftCycle</span>
+              <span className="auth-logo-name">RE-ART</span>
             </Link>
           </div>
 
@@ -69,7 +138,7 @@ export default function LoginPage() {
           </div>
 
           <div className="auth-left-footer">
-            <span className="auth-copyright">© 2024 EcoArtisan Marketplace. Inspired by Nature.</span>
+            <span className="auth-copyright">© 2024 RE-ART Marketplace. Inspired by Nature.</span>
           </div>
         </div>
       </div>
@@ -93,6 +162,7 @@ export default function LoginPage() {
             </button>
           </div>
 
+          {/* ── LOGIN FORM ── */}
           {activeTab === 'login' ? (
             <div className="auth-form-section">
               <div className="auth-form-header">
@@ -115,6 +185,9 @@ export default function LoginPage() {
                       placeholder="email@example.com"
                       className="auth-input"
                       autoComplete="email"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      required
                     />
                   </div>
                 </div>
@@ -136,6 +209,9 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       className="auth-input"
                       autoComplete="current-password"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"
@@ -167,11 +243,17 @@ export default function LoginPage() {
                   <label htmlFor="remember-me" className="auth-remember-label">Duy trì đăng nhập cho lần tới</label>
                 </div>
 
-                <button type="submit" className="auth-submit-btn">
-                  Đăng nhập ngay
-                  <svg width="13" height="14" viewBox="0 0 13 14" fill="none">
-                    <path d="M11.993 7.61794C12.3348 7.27615 12.3348 6.72107 11.993 6.37927L7.61797 2.00427C7.27617 1.66248 6.72109 1.66248 6.3793 2.00427C6.0375 2.34607 6.0375 2.90115 6.3793 3.24294L9.26406 6.12498H0.875C0.391016 6.12498 0 6.51599 0 6.99998C0 7.48396 0.391016 7.87498 0.875 7.87498H9.26133L6.38203 10.757C6.04023 11.0988 6.04023 11.6539 6.38203 11.9957C6.72383 12.3375 7.27891 12.3375 7.6207 11.9957L11.9957 7.62068L11.993 7.61794Z" fill="white" />
-                  </svg>
+                {loginError && (
+                  <p className="auth-error-msg">{loginError}</p>
+                )}
+
+                <button type="submit" className="auth-submit-btn" disabled={loginLoading}>
+                  {loginLoading ? 'Đang đăng nhập...' : 'Đăng nhập ngay'}
+                  {!loginLoading && (
+                    <svg width="13" height="14" viewBox="0 0 13 14" fill="none">
+                      <path d="M11.993 7.61794C12.3348 7.27615 12.3348 6.72107 11.993 6.37927L7.61797 2.00427C7.27617 1.66248 6.72109 1.66248 6.3793 2.00427C6.0375 2.34607 6.0375 2.90115 6.3793 3.24294L9.26406 6.12498H0.875C0.391016 6.12498 0 6.51599 0 6.99998C0 7.48396 0.391016 7.87498 0.875 7.87498H9.26133L6.38203 10.757C6.04023 11.0988 6.04023 11.6539 6.38203 11.9957C6.72383 12.3375 7.27891 12.3375 7.6207 11.9957L11.9957 7.62068L11.993 7.61794Z" fill="white" />
+                    </svg>
+                  )}
                 </button>
               </form>
 
@@ -186,15 +268,16 @@ export default function LoginPage() {
               </p>
             </div>
           ) : (
+            /* ── REGISTER FORM ── */
             <div className="auth-form-section">
               <div className="auth-form-header">
                 <h2 className="auth-form-title">Tạo tài khoản mới</h2>
                 <p className="auth-form-subtitle">Bắt đầu hành trình sống xanh của bạn ngay hôm nay</p>
               </div>
 
-              <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+              <form className="auth-form" onSubmit={handleRegister}>
                 <div className="auth-field">
-                  <label className="auth-field-label" htmlFor="reg-name">Họ và tên</label>
+                  <label className="auth-field-label" htmlFor="reg-name">Tên đăng nhập</label>
                   <div className="auth-input-wrapper">
                     <span className="auth-input-icon">
                       <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
@@ -204,9 +287,12 @@ export default function LoginPage() {
                     <input
                       id="reg-name"
                       type="text"
-                      placeholder="Nguyễn Văn A"
+                      placeholder="nguyenvana"
                       className="auth-input"
-                      autoComplete="name"
+                      autoComplete="username"
+                      value={regUsername}
+                      onChange={(e) => setRegUsername(e.target.value)}
+                      required
                     />
                   </div>
                 </div>
@@ -225,6 +311,9 @@ export default function LoginPage() {
                       placeholder="email@example.com"
                       className="auth-input"
                       autoComplete="email"
+                      value={regEmail}
+                      onChange={(e) => setRegEmail(e.target.value)}
+                      required
                     />
                   </div>
                 </div>
@@ -243,6 +332,9 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       className="auth-input"
                       autoComplete="new-password"
+                      value={regPassword}
+                      onChange={(e) => setRegPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"
@@ -277,6 +369,9 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       className="auth-input"
                       autoComplete="new-password"
+                      value={regConfirmPassword}
+                      onChange={(e) => setRegConfirmPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"
@@ -297,11 +392,17 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <button type="submit" className="auth-submit-btn">
-                  Tạo tài khoản
-                  <svg width="13" height="14" viewBox="0 0 13 14" fill="none">
-                    <path d="M11.993 7.61794C12.3348 7.27615 12.3348 6.72107 11.993 6.37927L7.61797 2.00427C7.27617 1.66248 6.72109 1.66248 6.3793 2.00427C6.0375 2.34607 6.0375 2.90115 6.3793 3.24294L9.26406 6.12498H0.875C0.391016 6.12498 0 6.51599 0 6.99998C0 7.48396 0.391016 7.87498 0.875 7.87498H9.26133L6.38203 10.757C6.04023 11.0988 6.04023 11.6539 6.38203 11.9957C6.72383 12.3375 7.27891 12.3375 7.6207 11.9957L11.9957 7.62068L11.993 7.61794Z" fill="white" />
-                  </svg>
+                {regError && (
+                  <p className="auth-error-msg">{regError}</p>
+                )}
+
+                <button type="submit" className="auth-submit-btn" disabled={regLoading}>
+                  {regLoading ? 'Đang tạo tài khoản...' : 'Tạo tài khoản'}
+                  {!regLoading && (
+                    <svg width="13" height="14" viewBox="0 0 13 14" fill="none">
+                      <path d="M11.993 7.61794C12.3348 7.27615 12.3348 6.72107 11.993 6.37927L7.61797 2.00427C7.27617 1.66248 6.72109 1.66248 6.3793 2.00427C6.0375 2.34607 6.0375 2.90115 6.3793 3.24294L9.26406 6.12498H0.875C0.391016 6.12498 0 6.51599 0 6.99998C0 7.48396 0.391016 7.87498 0.875 7.87498H9.26133L6.38203 10.757C6.04023 11.0988 6.04023 11.6539 6.38203 11.9957C6.72383 12.3375 7.27891 12.3375 7.6207 11.9957L11.9957 7.62068L11.993 7.61794Z" fill="white" />
+                    </svg>
+                  )}
                 </button>
               </form>
 

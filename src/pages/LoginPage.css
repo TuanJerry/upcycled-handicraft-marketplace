@@ -390,8 +390,27 @@
   transition: opacity 0.2s;
 }
 
-.auth-submit-btn:hover {
+.auth-submit-btn:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Error message */
+.auth-error-msg {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #FEE2E2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
 }
 
 /* Divider */

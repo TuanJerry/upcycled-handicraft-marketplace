@@ -13,8 +13,12 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const [username, setUsername] = useState('')
+
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true')
+    const token = localStorage.getItem('token')
+    setIsLoggedIn(!!token)
+    setUsername(localStorage.getItem('username') ?? '')
   }, [])
 
   useEffect(() => {
@@ -30,8 +34,11 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
   }, [dropdownOpen])
 
   function handleLogout() {
-    localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    localStorage.removeItem('roles')
     setIsLoggedIn(false)
+    setUsername('')
     setDropdownOpen(false)
     navigate('/dang-nhap')
   }
@@ -85,7 +92,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
                       </clipPath>
                     </defs>
                   </svg>
-                  <span className="header-username">Nguyễn Văn A</span>
+                  <span className="header-username">{username || 'Tài khoản'}</span>
                   <svg className={`header-chevron${dropdownOpen ? ' header-chevron--open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path d="M2 4L6 8L10 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
